@@ -1,7 +1,7 @@
 import argparse
 import sys
 import logging
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import signal, grp, os
 
@@ -338,7 +338,7 @@ class MQTTPublisher:
 
 class NumpyArrayEncoder(json.JSONEncoder):
     def default(self, obj):
-        if isinstance(obj, numpy.ndarray):
+        if isinstance(obj, np.ndarray):
             return obj.tolist()
         if isinstance(obj, datetime):
             return obj.__str__()
