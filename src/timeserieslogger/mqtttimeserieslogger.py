@@ -3,7 +3,7 @@ import sys
 import logging
 from datetime import datetime
 
-import signal, lockfile, grp, os
+import signal, grp, os
 
 from pwd import getpwnam
 from daemonize import Daemonize
@@ -269,7 +269,7 @@ class MQTTPublisher:
 
     def _mqtt_on_connect(self, client, userdata, flags, rc):
         if rc == 0:
-            self._logger.debug("MQTT: Connected to broker".format(rc))
+            self._logger.debug("MQTT: Connected to broker")
 #            self.publish_event("mqtt/connect")
         else:
             self._logger.error("MQTT: Failed to connect to broker ({})".format(rc))
@@ -335,6 +335,16 @@ class MQTTPublisher:
     def close(self):
         self._shutdown()
         sleep(5)
+
+class NumpyArrayEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, numpy.ndarray):
+            return obj.tolist()
+        if isinstance(obj, datetime):
+            return obj.__str__()
+        if isinstance(obj, timedelta):
+            return obj.__str__()
+        return json.JSONEncoder.default(self, obj)
 
 # ========== Startup logic: Argument parsing and daemonization ==========
 
