@@ -125,11 +125,11 @@ class MQTTLoggerDaemon:
             self._log.error(f"Failed to load old data\n{str(e)}")
 
         # Update _our_ data
-        if f"{sensorname}" not in olddata:
-            olddata[f"{sensorname}"] = []
-            olddata[f"{sensorname}_ts"] = []
-        olddata[f"{sensorname}"].append(msg[field])
-        olddata[f"{sensorname}_ts"].append(int(datetime.now().timestamp()))
+        if f"{sensorname}_{field}" not in olddata:
+            olddata[f"{sensorname}_{field}"] = []
+            olddata[f"{sensorname}_{field}__ts"] = []
+        olddata[f"{sensorname}_{field}"].append(msg[field])
+        olddata[f"{sensorname}_{field}__ts"].append(int(datetime.now().timestamp()))
 
         # And write out again ...
         for k in olddata:
