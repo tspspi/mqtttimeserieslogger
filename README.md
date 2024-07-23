@@ -12,6 +12,12 @@ for each measurement at the moment (this will change in future).
 The service is configured by a configuration file (by default
 at ```~/.config/mqttserieslogger.cfg```.
 
+## Installation
+
+```
+pip install mqtttimeserieslogger-tspspi
+```
+
 ## Sample configuration
 
 ```
@@ -35,4 +41,32 @@ at ```~/.config/mqttserieslogger.cfg```.
                 }
         ]
 }
+```
+
+## Automatic launching with ```rc.init``` script
+
+```
+#!/bin/sh
+
+# PROVIDE: mqtttimeserieslogger
+# REQUIRE: NETWORKING SERVERS
+
+# Simple MQTT time series logger
+# 
+# RC configuration variables:
+#  mqtttimeserieslogger_enable:="NO"
+#   Enables the logging service
+
+. /etc/rc.subr
+
+name="mqtttimeserieslogger"
+rcvar=mqtttimeserieslogger_enable
+
+load_rc_config $name
+: ${mqtttimeserieslogger_enable:="NO"}
+
+command=/usr/local/bin/mqtttimeserieslogger
+
+load_rc_config $name
+run_rc_command "$1"
 ```
