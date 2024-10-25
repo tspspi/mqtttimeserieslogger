@@ -74,9 +74,10 @@ class MQTTLoggerDaemon:
                 for quant in ds["quantities"]:
                     if ("name" not in quant) or ("topic" not in quant) or ("field" not in quant):
                         raise ValueError("Configuration of quantity invalid, missing name, topic or field")
+
                     handlers.append({
                         'topic' : quant["topic"],
-                        'handler' : [ lambda topic, msg : self._receive_message(topic, msg, quant["name"], quant["field"]) ]
+                        'handler' : [ lambda topic, msg, fields=quant["field"], qname=quant["name"] : self._receive_message(topic, msg, qname, fields) ]
                     })
                     self._log.debug(f"Registering handler for {quant['topic']}: sensor {quant['name']}, field {quant['field']}")
 
