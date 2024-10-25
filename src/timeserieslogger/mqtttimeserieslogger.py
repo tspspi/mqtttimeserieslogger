@@ -386,6 +386,9 @@ def parseArguments():
     if args.logfile:
         fileHandleLog = logging.FileHandler(args.logfile)
         logger.addHandler(fileHandleLog)
+    if args.foreground:
+        stderrHandler = logging.StreamHandler(sys.stderr)
+        logger.addHandler(stderrHandler)
 
     return args, logger
 
